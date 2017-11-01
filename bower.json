@@ -2,9 +2,9 @@
   "name": "pdf-annotation",
   "version": "1.0.0",
   "main": ["pdf-annotation.js", "src/css/style.css"],
-  "homepage": "https://github.com/bjp232004/pdf-annotation",
+  "homepage": "https://github.com/dexyppdf/pdf-annotation",
   "authors": [
-    "Bhargav <bjp232004@gmail.com>"
+    "Dexyp <dexyppdf@gmail.com>"
   ],
   "description": "PDF Annotation using canvas image rendering tool.",
   "keywords": [
