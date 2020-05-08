@@ -150,9 +150,9 @@
         ctx.strokeStyle = '#' + this.options.fillStyle.replace('#', '');
       },
       resetStyleElement: function() {
-        this.options.fillStyle = document.getElementById('fillstyle').value;
-        this.options.font_size = document.getElementById('fontsize').value;
-        this.options.lineWidth = document.getElementById('linewidth').value;
+        this.options.fillStyle = document.getElementById('fillstyle') ? document.getElementById('fillstyle').value : null;
+        this.options.font_size = document.getElementById('fontsize') ? document.getElementById('fontsize').value : null;
+        this.options.lineWidth = document.getElementById('linewidth') ? document.getElementById('linewidth').value : null;
       },
       setButtonStyle: function() {
         if(this.raw_undo_ver_list.length > 0) {
@@ -398,9 +398,11 @@
           var img = document.createElement("img");
           img.src = restore_state;
           img.onload = function() {
-            ctx.clearRect(0, 0, factoryObj.history.options.canvas_width, factoryObj.history.options.canvas_height);
-            ctx.drawImage(img, 0, 0, factoryObj.history.options.canvas_width, factoryObj.history.options.canvas_height);
-
+            if (ctx){
+              ctx.clearRect(0, 0, factoryObj.history.options.canvas_width, factoryObj.history.options.canvas_height);
+              ctx.drawImage(img, 0, 0, factoryObj.history.options.canvas_width, factoryObj.history.options.canvas_height);
+            }
+            
             if(factoryObj.history.raw_undo_list[factoryObj.history.options.activePage].length > 0) {
               factoryObj.move.redrawTool();
             }
@@ -1292,11 +1294,13 @@
               }
 
               if(factoryObj.history.options.arrData.name == 'text') {
-                for(var k=0; k<factoryObj.history.raw_undo_list[factoryObj.history.options.activePage][this.options.movedObject].finalTextInfo.length; k++) {
-                  factoryObj.history.raw_undo_list[factoryObj.history.options.activePage][this.options.movedObject].finalTextInfo[k].x = factoryObj.history.raw_undo_list[factoryObj.history.options.activePage][this.options.movedObject].finalTextInfo[k].x + this.options.diffX;
-                  factoryObj.history.raw_undo_list[factoryObj.history.options.activePage][this.options.movedObject].finalTextInfo[k].y = factoryObj.history.raw_undo_list[factoryObj.history.options.activePage][this.options.movedObject].finalTextInfo[k].y + this.options.diffY;
+                if (factoryObj.history.raw_undo_list[factoryObj.history.options.activePage][this.options.movedObject].finalTextInfo){
+                  for(var k=0; k<factoryObj.history.raw_undo_list[factoryObj.history.options.activePage][this.options.movedObject].finalTextInfo.length; k++) {
+                    factoryObj.history.raw_undo_list[factoryObj.history.options.activePage][this.options.movedObject].finalTextInfo[k].x = factoryObj.history.raw_undo_list[factoryObj.history.options.activePage][this.options.movedObject].finalTextInfo[k].x + this.options.diffX;
+                    factoryObj.history.raw_undo_list[factoryObj.history.options.activePage][this.options.movedObject].finalTextInfo[k].y = factoryObj.history.raw_undo_list[factoryObj.history.options.activePage][this.options.movedObject].finalTextInfo[k].y + this.options.diffY;
+                  }
                 }
-
+                
                 factoryObj.history.raw_undo_list[factoryObj.history.options.activePage][this.options.movedObject].textInfo.x += this.options.diffX;
                 factoryObj.history.raw_undo_list[factoryObj.history.options.activePage][this.options.movedObject].textInfo.y += this.options.diffY;
               }
@@ -1799,7 +1803,9 @@
 
         if (!factoryObj.history.initial_canvas_url.hasOwnProperty(page)) {
           var tmpImgObj = document.getElementById('page' + page);
-          factoryObj.history.initial_canvas_url[page] = tmpImgObj.toDataURL();
+          if (tmpImgObj){
+            factoryObj.history.initial_canvas_url[page] = tmpImgObj.toDataURL();
+          }          
           factoryObj.history.final_canvas_url[factoryObj.history.options.activePage] = factoryObj.history.initial_canvas_url[factoryObj.history.options.activePage];
           factoryObj.options.imgURL = factoryObj.history.initial_canvas_url[factoryObj.history.options.activePage];
         } else {
